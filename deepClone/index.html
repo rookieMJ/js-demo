@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>deepClone</title>
+</head>
+<body>
+<script>
+    function deepClone (origin, target) {
+        var tar = target || {}, // 兼容不同类型容器 {} or []
+            toStr = Object.prototype.toString,
+            arrType = '[object Array]',
+            item;
+
+        for (var key in origin) {
+            if (origin.hasOwnProperty(key)) {
+                item = origin[key];
+                if (typeof item === 'object' && item !== 'null') { // 引用值
+
+                    if (toStr.call(item) === arrType) {
+                        tar[key] = [];
+                    } else {
+                        tar[key] = {};
+                    }
+
+                    // 递归
+                    deepClone(item, tar[key]);
+                } else {
+                    // 普通值：递归出口
+                    tar[key] = item;
+                }
+            }
+        }
+        return tar;
+    }
+</script>
+</body>
+</html>

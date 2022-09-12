@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>throttle</title>
+</head>
+<body>
+<script>
+    // 方法1: 时间戳
+    function throttle1(fn, wait) {
+        let time = 0;
+        return function () {
+            const self = this;
+            const args = arguments;
+            let now = Date.now();
+            if (now - time > wait) {
+                fn.apply(self, args);
+                time = now;
+            }
+        };
+    }
+
+    // 方法2: 定时器
+    function throttle2(fn, wait) {
+        let timer;
+        return function () {
+            const self = this;
+            const args = arguments;
+
+            if (!timer) {
+                timer = setTimeout(function () {
+                    timer = null;
+                    fn.apply(self, args);
+                }, wait);
+            }
+        };
+    }
+
+    function logTxt () {
+        console.log('resize');
+    }
+
+    // window.addEventListener('resize', logTxt);
+
+    // window.addEventListener('resize', throttle1(logTxt, 2000));
+    window.addEventListener('resize', throttle2(logTxt, 4000));
+
+</script>
+</body>
+</html>
